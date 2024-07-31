@@ -54,7 +54,7 @@ void preimage(int rounds)
     unsigned w[rounds];
     unsigned hash[f->outputSize];
 
-    if ( cfg_rand_target )
+    if ( cfg_rand_target == 1 )
     {
         /* Generate a random pair of input/target */
         for( int i=0; i<f->inputSize; i++ )
@@ -80,7 +80,7 @@ void preimage(int rounds)
             return;
         }
     }
-    else
+    else if ( cfg_rand_target == 0 )
     {
         /* Read the input/target from stdin */
         int rcnt = 0;
@@ -92,6 +92,16 @@ void preimage(int rounds)
         for( int i=0; i<f->outputSize; i++ )
             rcnt += scanf("%x", &hash[i]);
         assert( rcnt == f->outputSize );
+    }
+    // all 0s
+    else if ( cfg_rand_target == 2 )
+    {
+        for ( int i=0; i<f->outputSize; i++ ) hash[i] = 0x0;
+    }
+    // all 1s
+    else if ( cfg_rand_target == 3 )
+    {
+        for ( int i=0; i<f->outputSize; i++ ) hash[i] = 0xffffffff;
     }
 
     /* Set hash target bits */
@@ -118,7 +128,7 @@ void display_usage()
             "  --xor                                    Use XOR clauses (default: off)\n"
             "  --adder_type or -A {two_operand | counter_chain | espresso | dot_matrix}\n"
             "                                           Specifies the type of multi operand addition encoding (default: espresso)\n"
-            "  --target or -t {random | stdin}          Hash target (default: random)\n"
+            "  --target or -t {random | stdin | 0 | 1}  Hash target - random, stdin, all 0s, or all 1s (default: random)\n"
             "                                           random: Generates a random input/target pair\n"
             "                                           stdin: Reads the target from stdin (space separated hex values)\n"
             "  --rounds or -r {int(16..80)}             Number of rounds in your function\n"
@@ -227,9 +237,11 @@ int main(int argc, char **argv)
                 break;
 
             case 't':
-                cfg_rand_target = strcmp(optarg, "random") == 0 ? 1 :
-                    strcmp(optarg, "stdin") == 0 ? 0 :
-                    -1;
+                if (strcmp(optarg, "stdin") == 0) cfg_rand_target = 0;
+                else if (strcmp(optarg, "random") == 0) cfg_rand_target = 1;
+                else if (strcmp(optarg, "0") == 0) cfg_rand_target = 2;
+                else if (strcmp(optarg, "1") == 0) cfg_rand_target = 3;
+                else cfg_rand_target = -1;
                 if (cfg_rand_target == -1)
                 {
                     fprintf(stderr, "Invalid or missing target type!\nUse -t or --target with random or stdin\n");
