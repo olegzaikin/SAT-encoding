@@ -1,3 +1,8 @@
+# Install
+
+The espresso logic minimizer must be installed beforehand.
+E.g. it can be taken from https://github.com/classabbyamp/espresso-logic
+
 # SAT Encoding
 
 Each folder contains codes for encoding some problems into Boolean satisfiability
