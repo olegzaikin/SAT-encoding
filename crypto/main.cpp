@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <assert.h>
 #include <getopt.h>
+#include <time.h>
 
 enum FuncType {
     FT_MD4,
