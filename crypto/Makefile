@@ -10,7 +10,7 @@ CFLAGS += $(MACROS)
 	g++ -c $< -o $@ $(CFLAGS)
 
 all: $(OBJS) $(TARGET).cpp
-	g++ $(OBJS) $(CFLAGS) $(TARGET).cpp -o $(TARGET)
+	g++ $(OBJS) $(CFLAGS) $(TARGET).cpp -o satencoding
 
 verify: verify-sha1.cpp verify-sha256.cpp verify-md4.cpp
 	g++ $(OBJS) $(CFLAGS) verify-sha1.cpp -o verify-sha1
@@ -18,4 +18,4 @@ verify: verify-sha1.cpp verify-sha256.cpp verify-md4.cpp
 	g++ $(OBJS) $(CFLAGS) verify-md4.cpp -o verify-md4
 
 clean:
-	rm -f $(OBJS) $(TARGET) verify-sha1 verify-sha256 verify-md4
+	rm -f $(OBJS) $(TARGET) verify-sha1 verify-sha256 verify-md4 satencoding

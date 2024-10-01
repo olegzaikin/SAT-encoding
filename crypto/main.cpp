@@ -8,6 +8,9 @@
 #include <assert.h>
 #include <getopt.h>
 #include <time.h>
+#include <string>
+
+std::string version = "1.1.0";
 
 enum FuncType {
     FT_MD4,
@@ -126,8 +129,9 @@ void preimage(int rounds)
 
 void display_usage()
 {
-    printf("USAGE: ./main {number_of_rounds}\n"
+    printf("USAGE: ./satencoding {number_of_rounds}\n"
             "  --help or -h                             Prints this message\n"
+            "  --version or -v                          Prints the version\n"
             "  --xor                                    Use XOR clauses (default: off)\n"
             "  --adder_type or -A {two_operand | counter_chain | espresso | dot_matrix}\n"
             "                                           Specifies the type of multi operand addition encoding (default: espresso)\n"
@@ -143,6 +147,10 @@ void display_usage()
           );
 }
 
+void display_version()
+{
+    printf("satencoding of version %s \n", version.c_str());
+}
 
 int main(int argc, char **argv)
 {
@@ -173,12 +181,13 @@ int main(int argc, char **argv)
         {"target", required_argument, 0, 't'},
         {"equal_toM_bits", required_argument, 0, 'M'},
         {"help",     no_argument,       0, 'h'},
+        {"version",  no_argument,       0, 'v'},
         {0, 0, 0, 0}
     };
 
     /* Process command line */
     int c, option_index;
-    while( (c = getopt_long(argc, argv, "a:r:f:F:A:t:M:h", long_options, &option_index)) != -1 )
+    while( (c = getopt_long(argc, argv, "a:r:f:F:A:t:M:h:v", long_options, &option_index)) != -1 )
     {
         switch ( c )
         {
@@ -266,6 +275,10 @@ int main(int argc, char **argv)
 
             case 'h':
                 display_usage();
+                return 1;
+
+            case 'v':
+                display_version();
                 return 1;
 
             case '?':
