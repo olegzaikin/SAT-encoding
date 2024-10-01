@@ -58,9 +58,17 @@ void Formula::fixedValue(int *z, unsigned value, int n)
 {
     for( int i=0; i<n; i++ )
     {
+        assert(z[i] > 0);
         int x = (value >> i) & 1 ? z[i] : -z[i];
         addClause({x});
     }
+}
+
+void Formula::fixedValueBit(int z, bool value)
+{
+    assert(z > 0);
+    int x = (value) ? z : -z;
+    addClause({x});
 }
 
 void Formula::rotl(int *z, int *x, int p, int n)

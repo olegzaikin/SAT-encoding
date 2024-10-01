@@ -30,6 +30,7 @@ int cfg_print_target;
 FuncType cfg_function;
 AnalysisType cfg_analysis;
 int fixed_bits;
+int cfg_equal_toM_bits;
 
 void preimage(int rounds)
 {
@@ -49,6 +50,7 @@ void preimage(int rounds)
 
     if ( cfg_use_xor_clauses ) f->cnf.setUseXORClauses();
     if ( cfg_multi_adder_type != Formula::MAT_NONE ) f->cnf.setMultiAdderType(cfg_multi_adder_type);
+    f->cnf.setEqualToMbits(cfg_equal_toM_bits);
 
     f->encode();
 
@@ -136,6 +138,7 @@ void display_usage()
             "  --function or -f {md4 | sha1 | sha256}   Type of function under analysis (default: sha1)\n"
             "  --analysis or -a {preimage | collision}  Type of analysis (default: preimage)\n"
             "  --print_target                           Prints the randomly generated message/target and exits (--target should be set to random mode)\n"
+            "  --equal_toM_bits -M {int(0..32)}         Number of message bits used in the last round (remaining are 0s)\n"
             "  --fix or -F {int(0..512)}                Fixes the given number (k) of input bits (in the range 0..(k-1)) (default: 0)\n"
           );
 }
@@ -154,6 +157,7 @@ int main(int argc, char **argv)
     cfg_analysis = AT_PREIMAGE;
     int rounds = -1;
     fixed_bits = 0;
+    cfg_equal_toM_bits = 32; // by default no bits are assigned to 0
 
     struct option long_options[] =
     {
@@ -167,13 +171,14 @@ int main(int argc, char **argv)
         {"analysis", required_argument, 0, 'a'},
         {"adder_type", required_argument, 0, 'A'},
         {"target", required_argument, 0, 't'},
+        {"equal_toM_bits", required_argument, 0, 'M'},
         {"help",     no_argument,       0, 'h'},
         {0, 0, 0, 0}
     };
 
     /* Process command line */
     int c, option_index;
-    while( (c = getopt_long(argc, argv, "a:r:f:F:A:t:h", long_options, &option_index)) != -1 )
+    while( (c = getopt_long(argc, argv, "a:r:f:F:A:t:M:h", long_options, &option_index)) != -1 )
     {
         switch ( c )
         {
@@ -246,6 +251,15 @@ int main(int argc, char **argv)
                 if (cfg_rand_target == -1)
                 {
                     fprintf(stderr, "Invalid or missing target type!\nUse -t or --target with random or stdin\n");
+                    return 1;
+                }
+                break;
+
+            case 'M':
+                cfg_equal_toM_bits = atoi(optarg);
+                if (cfg_equal_toM_bits < 0 || cfg_equal_toM_bits > 32)
+                {
+                    fprintf(stderr, "Inavlid value of cfg_equal_toM_bits\nMust be >= 0 and <= 32.");
                     return 1;
                 }
                 break;

@@ -7,6 +7,7 @@
 #include <queue>
 #include <algorithm>
 #include <stdexcept>
+#include <assert.h>
 
 using namespace std;
 
@@ -37,9 +38,11 @@ class Formula
         void addClause(Clause c);
 
         void fixedValue(int *z, unsigned v, int n = 32);                        // Forces the bitvector 'z' to the value 'v'
+        void fixedValueBit(int z, bool value);                                  // Forces the bi 'z' to the value 'v'
 
         int getVarCnt() { return varCnt; }
         int getClauseCnt() { return clauses.size(); }
+        int getEqualToMbits() { return equal_toM_bits; }
 
         enum PBMethod {
             PBM_NONE,
@@ -66,6 +69,10 @@ class Formula
         void setPBMethod(PBMethod method) { pbMethod = method; }
         void setAdderType(AdderType type) { adderType = type; }
         void setMultiAdderType(MultiAdderType type) { multiAdderType = type; }
+        void setEqualToMbits(int value) {
+            assert(value >= 0 && value <= 32);
+            equal_toM_bits = value;
+        }
 
         void dimacs(string fileName = "", bool header = true);                  // Prints the current clause database in DIMACS format to 'fileName'. If 'fileName' is not given, prints to stdout
 
@@ -112,6 +119,7 @@ class Formula
         AdderType adderType;
         MultiAdderType multiAdderType;
         vector<Clause> clauses;
+        int equal_toM_bits;
 
         void espresso(const vector<int> &lhs, const vector<int> &rhs);             // deriving lhs = addition(rhs), through espresso minimization;
 
