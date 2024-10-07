@@ -102,7 +102,7 @@ void SHA256::encode()
         cnf.newVars(T);
 
         // Intermediate inverse problem only for the last round:
-        if (i == rounds - 1) {
+        if ((i == rounds - 1) && (cnf.getEqualToMbits() < 32)) {
             int weakW[32];
             cnf.newVars(weakW, 32, "weakW");
             // Leftmost bits are constant 0s:
