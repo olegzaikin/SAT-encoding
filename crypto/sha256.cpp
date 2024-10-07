@@ -100,22 +100,29 @@ void SHA256::encode()
 
         int T[32];
         cnf.newVars(T);
-        // intermediate inverse problem:
-        int weakW[32];
-	    cnf.newVars(weakW, 32, "weakW");
-        // Leftmost bits are constant 0s:
-        int constant_M_bits = 32-cnf.getEqualToMbits();
-        //printf("constant_M_bits : %d\n", constant_M_bits);
-        for (unsigned j = 0; j < constant_M_bits; j++) {
-            cnf.fixedValueBit(weakW[j], false);
+
+        // Intermediate inverse problem only for the last round:
+        if (i == rounds - 1) {
+            int weakW[32];
+            cnf.newVars(weakW, 32, "weakW");
+            // Leftmost bits are constant 0s:
+            int constant_M_bits = 32-cnf.getEqualToMbits();
+            assert(constant_M_bits >= 0 && constant_M_bits <= 32);
+            //printf("constant_M_bits : %d\n", constant_M_bits);
+            for (unsigned j = 0; j < constant_M_bits; j++) {
+                cnf.fixedValueBit(weakW[j], false);
+            }
+            // Remaining rightmost bits are equal to message:
+            for (unsigned j = constant_M_bits; j < 32; j++) {
+                // Don't introduce new variables, use the remaining ones:
+                weakW[j] = w[i][j];
+            }
+            cnf.add5(T, E[i], sigma1, f1, k[i], weakW);
         }
-        // Remaining rightmost bits are equal to message:
-        for (unsigned j = constant_M_bits; j < 32; j++) {
-            // Don't introduce new variables, use the remaining ones:
-            weakW[j] = w[i][j];
+        else {
+            cnf.add5(T, E[i], sigma1, f1, k[i], w[i]); // usual way
         }
         //
-        cnf.add5(T, E[i], sigma1, f1, k[i], weakW);
 
         cnf.add2(E[i+4], A[i], T);
 

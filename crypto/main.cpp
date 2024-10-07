@@ -10,7 +10,7 @@
 #include <time.h>
 #include <string>
 
-std::string version = "1.1.0";
+std::string version = "1.1.1";
 
 enum FuncType {
     FT_MD4,
