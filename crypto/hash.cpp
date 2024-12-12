@@ -23,9 +23,11 @@ void MDHash::encode()
     throw "Base class encode!";
 }
 
-void MDHash::fixOutput(unsigned *target)
+void MDHash::fixOutput(unsigned *target, const int is_template_cnf)
 {
-    for(int i=0; i<outputSize; i++)
-        cnf.fixedValue(out[i], target[i]);
+    // Add unit clauses for output variables only if not template CNF
+    if (is_template_cnf == 0) {
+        for(int i=0; i<outputSize; i++)
+            cnf.fixedValue(out[i], target[i]);
+    }
 }
-

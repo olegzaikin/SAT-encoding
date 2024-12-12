@@ -10,7 +10,7 @@
 #include <time.h>
 #include <string>
 
-std::string version = "1.1.2";
+std::string version = "1.1.3";
 
 enum FuncType {
     FT_MD4,
@@ -34,6 +34,7 @@ FuncType cfg_function;
 AnalysisType cfg_analysis;
 int fixed_bits;
 int cfg_equal_toM_bits;
+int cfg_template_cnf;
 
 void preimage(int rounds)
 {
@@ -111,7 +112,7 @@ void preimage(int rounds)
     }
 
     /* Set hash target bits */
-    f->fixOutput(hash);
+    f->fixOutput(hash, cfg_template_cnf);
 
     /* Fix input bits (if asked) */
     for(int i=0; i<fixed_bits; i++)
@@ -141,6 +142,7 @@ void display_usage()
             "  --rounds or -r {int(16..80)}             Number of rounds in your function\n"
             "  --function or -f {md4 | sha1 | sha256}   Type of function under analysis (default: sha1)\n"
             "  --analysis or -a {preimage | collision}  Type of analysis (default: preimage)\n"
+            "  --template_cnf                           If a template CNF (with no fixed output bits) is needed\n"
             "  --print_target                           Prints the randomly generated message/target and exits (--target should be set to random mode)\n"
             "  --equal_toM_bits -M {int(0..32)}         Number of message bits used in the last round (remaining are 0s)\n"
             "  --fix or -F {int(0..512)}                Fixes the given number (k) of input bits (in the range 0..(k-1)) (default: 0)\n"
@@ -166,12 +168,14 @@ int main(int argc, char **argv)
     int rounds = -1;
     fixed_bits = 0;
     cfg_equal_toM_bits = 32; // by default no bits are assigned to 0
+    cfg_template_cnf = 0; // if CNF is template, not putput bits are fixed
 
     struct option long_options[] =
     {
         /* flag options */
-        {"xor",           no_argument, &cfg_use_xor_clauses,   1},
-        {"print_target",  no_argument, &cfg_print_target,      1},
+        {"xor",           no_argument, &cfg_use_xor_clauses, 1},
+        {"print_target",  no_argument, &cfg_print_target,    1},
+        {"template_cnf",  no_argument, &cfg_template_cnf,    1},
         /* valued options */
         {"rounds",   required_argument, 0, 'r'},
         {"fix",   required_argument, 0, 'F'},

@@ -5,3 +5,6 @@ verify-md4
 satencoding
 *.o
 *.cnf
+hashes_256bit.txt
+gen_random_hashes.py
+gen_hash_preimage_instances.py

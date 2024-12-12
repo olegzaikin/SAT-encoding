@@ -17,7 +17,7 @@ class MDHash {
         virtual ~MDHash();
 
         virtual void encode();
-        void fixOutput(unsigned *target);
+        void fixOutput(unsigned *target, const int is_template_cnf);
 
         int rounds;        /// Number of rounds
         bool initialBlock; /// Whether this is the first MD block
