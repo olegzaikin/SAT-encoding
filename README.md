@@ -31,6 +31,19 @@ To make a crypto generator:
 
 ### Running
 
+To generate a tamplate CNF (without known output) encoding the first 18 rounds (out of 64) of SHA-256, run:
+
+./satencoding -f sha256 -t 1 -r 18 -a preimage --template_cnf > nossum_sha256_preimage_18r_template.cnf
+
+To generate CNFs encoding standard (non-intermediate) preimage attacks
+on MD4, SHA-1, or SHA-256, run:
+
+> ./gen_cnfs.sh
+
+To generate CNFs encoding intermediate preimage attacks on SHA-256, run:
+
+> ./gen_weakM_cnfs.sh
+
 ### Citation
 If you use these sources or/and data, please cite:
 
