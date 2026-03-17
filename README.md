@@ -30,3 +30,16 @@ To make a crypto generator:
 > make
 
 ### Running
+
+### Citation
+If you use these sources or/and data, please cite:
+
+```
+@article{Zaikin2026-Constraints,
+  author       = {Oleg Zaikin},
+  title        = {Preimage attacks on round-reduced {MD5}, {SHA-1}, and {SHA-256} using parameterized {SAT} solver},
+  journal      = {Constraints},
+  volume       = {31},
+  year         = {2026}
+}
+```
