@@ -16,5 +16,4 @@ do
     python3 ./gen_hash_preimage_instances.py ./nossum_sha256_preimage_${rnd}r_template.cnf hashes_256bit.txt 256 10 --hashvars=./vars_nossum_sha256-${rnd}r --random
     mkdir cnfs_nossum_sha256_${rnd}r_10hashes
     mv nossum_sha256_preimage_${rnd}r_*_hashlen* ./cnfs_nossum_sha256_${rnd}r_10hashes/
-    rm *_template.cnf
 done
