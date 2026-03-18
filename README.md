@@ -19,10 +19,7 @@ In this extension, intermediate preimage attacks between rounds (or steps) i and
 
 ### Compiling
 
-The espresso logic minimizer must be installed beforehand.
-E.g. it can be taken from https://github.com/classabbyamp/espresso-log
-
-After the espresso is installed
+The espresso logic minimizer must be installed beforehand. It can be taken from [here](https://github.com/classabbyamp/espresso-logic). After the espresso is installed, run
 > cd crypto
 > make
 
