@@ -16,22 +16,21 @@ In this extension, intermediate preimage attacks between rounds (or steps) i and
 ### Directories overview
 
 /core - an encoder for the basic operations.
-/graph - Graph problems
 /crypto - Preimage/collision attack on MD4, SHA-1, and SHA-256.
-/arith - Integer arithmetic problems
+/cnfs - CNFs encoding preimage attacks on round-reduced SHA-256 (from the Constraints paper).
 
 ### Compiling
 
 The espresso logic minimizer must be installed beforehand.
 E.g. it can be taken from https://github.com/classabbyamp/espresso-log
 
-To make a crypto generator:
+After the espresso is installed
 > cd crypto
 > make
 
 ### Running
 
-To generate a tamplate CNF (without known output) encoding the first 18 rounds (out of 64) of SHA-256, run:
+To generate a template CNF (without known output) encoding the first 18 rounds (out of 64) of SHA-256, run:
 
 ./satencoding -f sha256 -t 1 -r 18 -a preimage --template_cnf > nossum_sha256_preimage_18r_template.cnf
 
